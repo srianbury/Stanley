@@ -1,2 +1,2 @@
 # Stanley
-A website for Mr. Stan
+A website to play the Mr. Stanley running game
