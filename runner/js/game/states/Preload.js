@@ -18,7 +18,7 @@ StanRunner.Preload.prototype = {
 
 		this.load.spritesheet('coins', 'assets/images/bones.png', 51, 51, 7); //width, height, num images
 		this.load.spritesheet('player', 'assets/images/stanpack.png', 229, 296, 4);
-		this.load.spritesheet('missile', 'assets/images/vacuums.png', 157, 210, 4);
+		this.load.spritesheet('missile', 'assets/images/missiles-ps.png', 361, 218, 4);
 
 		this.load.audio('gameMusic', ['assets/audio/Pamgaea.mp3', 'assets/audio/Pamgaea.ogg']);
 		this.load.audio('rocket', 'assets/audio/rocket.wav');

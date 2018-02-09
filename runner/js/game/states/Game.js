@@ -2,11 +2,13 @@ StanRunner.Game = function() {
 	this.playerMinAngle = -20;
 	this.playerMaxAngle = 20;
 
-	this.coinRate = 1000;
+	this.coinRate = 500; //generate a coin every 500ms
 	this.coinTimer = 0;
 
-	this.enemyRate = 500;
+	this.enemyRate = 1000;
 	this.enemyTimer = 0;
+
+	this.score = 0;
 };
 
 StanRunner.Game.prototype = {
@@ -41,6 +43,8 @@ StanRunner.Game.prototype = {
 		this.coins = this.game.add.group();
 		this.enemies = this.game.add.group();
 
+		this.scoreText = this.game.add.bitmapText(10,10, 'minecraftia', 'Score: 0', 24);
+
 	},
 
 	update: function() {
@@ -73,6 +77,8 @@ StanRunner.Game.prototype = {
 		}
 
 		this.game.physics.arcade.collide(this.player, this.ground, this.groundHit, null, this);
+
+		this.game.physics.arcade.overlap(this.player, this.coins, this.coinHit, null, this);
 	},
 
 	shutdown: function(){
@@ -109,5 +115,11 @@ StanRunner.Game.prototype = {
 
 	groundHit: function(player, ground){
 		player.body.velocity.y = -200;
+	},
+
+	coinHit: function(player, coin){
+		this.score++;
+		coin.kill();
+		this.scoreText.text = 'Score: ' + this.score;
 	}
 }
