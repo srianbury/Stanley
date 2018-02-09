@@ -14,7 +14,7 @@ StanRunner.Boot.prototype = {
 		this.load.image('preloadBar', 'assets/images/preloader-bar.png');
 	},
 	create: function(){
-		this.game.state.backgroundColor = '#000'; //white
+		this.game.state.backgroundColor = '#000000'; //white
 		this.input.maxpointers = 1; //setup input for the game, if you know youre not going to use multi touch, which we aren't, you should set it to one
 
 		if(this.game.device.desktop){
