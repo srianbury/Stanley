@@ -79,10 +79,17 @@ StanRunner.Game.prototype = {
 		this.game.physics.arcade.collide(this.player, this.ground, this.groundHit, null, this);
 
 		this.game.physics.arcade.overlap(this.player, this.coins, this.coinHit, null, this);
+		this.game.physics.arcade.overlap(this.player, this.enemies, this.enemyHit, null, this);
 	},
 
 	shutdown: function(){
+		//allows them to be garbage collected
+		this.coins.destroy();
+		this.enemies.destroy();
 
+		this.score = 0;
+		this.coinTimer = 0;
+		this.enemyTimer = 0;
 	},
 
 	createCoin: function(){
@@ -121,5 +128,23 @@ StanRunner.Game.prototype = {
 		this.score++;
 		coin.kill();
 		this.scoreText.text = 'Score: ' + this.score;
+	},
+
+	enemyHit: function(player, enemy){
+		player.kill();
+		enemy.kill();
+
+		this.ground.stopScroll();
+		this.background.stopScroll();
+		this.foreground.stopScroll();
+
+		this.enemies.setAll('body.velocity.x', 0);
+		this.coins.setAll('body.velocity.x', 0);
+
+		this.enemyTimer = Number.MAX_VALUE;
+		this.coinTimer = Number.MAX_VALUE;
+
+		var scoreboard = new Scoreboard(this.game);
+		scoreboard.show(this.score);
 	}
 }
