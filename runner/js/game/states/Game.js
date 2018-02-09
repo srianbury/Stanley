@@ -1,6 +1,12 @@
 StanRunner.Game = function() {
 	this.playerMinAngle = -20;
 	this.playerMaxAngle = 20;
+
+	this.coinRate = 1000;
+	this.coinTimer = 0;
+
+	this.enemyRate = 500;
+	this.enemyTimer = 0;
 };
 
 StanRunner.Game.prototype = {
@@ -31,6 +37,10 @@ StanRunner.Game.prototype = {
 		this.game.physics.arcade.enableBody(this.player);
 		this.player.body.collideWorldBounds = true;
 		this.player.body.bounce.set(0.30);
+
+		this.coins = this.game.add.group();
+		this.enemies = this.game.add.group();
+
 	},
 
 	update: function() {
@@ -44,7 +54,7 @@ StanRunner.Game.prototype = {
 				this.player.angle = 0;
 			}
 			if(this.player.angle < this.playerMaxAngle){
-				this.player.angle += 0.5;
+				this.player.angle += 0.7;
 			}
 		}else if(this.player.body.velocity.y >= 0 && !this.game.input.activePointer.isDown){
 			if(this.player.angle > this.playerMinAngle){
@@ -52,11 +62,49 @@ StanRunner.Game.prototype = {
 			}
 		}
 
+		if(this.coinTimer < this.game.time.now){
+			this.createCoin();
+			this.coinTimer = this.game.time.now + this.coinRate;
+		}
+
+		if(this.enemyTimer < this.game.time.now){
+			this.createEnemy();
+			this.enemyTimer = this.game.time.now + this.enemyRate;
+		}
+
 		this.game.physics.arcade.collide(this.player, this.ground, this.groundHit, null, this);
 	},
 
 	shutdown: function(){
 
+	},
+
+	createCoin: function(){
+		var x = this.game.width;
+		var y = this.game.rnd.integerInRange(50,this.game.world.height - 192);
+
+		var coin = this.coins.getFirstExists(false);
+		if(!coin) {
+			coin = new Coin(this.game, 0, 0);
+			this.coins.add(coin);
+		}
+
+		coin.reset(x,y);
+		coin.revive();
+	}, 
+
+	createEnemy: function(){
+		var x = this.game.width;
+		var y = this.game.rnd.integerInRange(50,this.game.world.height - 192);
+
+		var enemy = this.enemies.getFirstExists(false);
+		if(!enemy) {
+			enemy = new Enemy(this.game, 0, 0);
+			this.enemies.add(enemy);
+		}
+
+		enemy.reset(x,y);
+		enemy.revive();
 	},
 
 	groundHit: function(player, ground){
